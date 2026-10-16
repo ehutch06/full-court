@@ -94,6 +94,51 @@ tr:hover td{background:#c1d9ff0a}
 .statnum{color:#f6f9ff}
 .rating{color:#a9d8ff}
 :focus-visible{outline:2px solid #acd7ff;outline-offset:3px}
+
+/* Mobile UI repair v3 — explicit dark surfaces, readable hierarchy, properly sized tabs */
+html,body{background-color:#0b1220!important;color:#eaf1fa!important}
+.layout,.main,#app{background:transparent;color:inherit}
+.main{min-height:100vh}
+.card,.gamebox,.choice,.modal{color:#edf3fc}
+.hero{color:#f6f9ff}
+.hero h2,.hero h2 b,.hero .eyebrow{color:#f6f9ff!important;text-shadow:0 2px 14px #08111b50}
+.hero h2 b{color:#95cbff!important}
+.hero .btn:not(.ghost):not(.secondary){background:#a5d0ff!important;color:#0a2038!important}
+.hero .btn.ghost{background:#2a4059;color:#f4f8fe}
+.eyebrow,.statnote,.news time{color:#a8d5ff}
+.statnum,.card h3,.title,.quote{color:#f4f8ff}
+.card .sub,.muted,.tiny,.statlab{color:#aebcd0}
+.card{background:#172235!important;border:1px solid #384960}
+.modal{background:#182438}
+.toast{background:#a8d5ff;color:#102137}
+.program-option.selected{background:#223c55}
+.banner{background:#223447;border-color:#405b75;color:#e4f3ff}
+@media(max-width:700px){
+ html{background:#0b1220!important}
+ body{background:#0b1220!important;min-width:0;overflow-x:hidden}
+ .layout{background:#0b1220;display:flex;flex-direction:column}
+ .main{background:#0b1220;min-width:0;width:100%;padding:calc(20px + env(safe-area-inset-top)) 14px calc(115px + env(safe-area-inset-bottom))}
+ .top{gap:10px}
+ .title{font-size:clamp(35px,10vw,49px);line-height:1.0;letter-spacing:-.02em}
+ .hero{background:linear-gradient(135deg,#223956 0%,#17283e 100%)!important;border-color:#47617d;min-height:0;padding:22px}
+ .hero h2{font-size:clamp(36px,10vw,51px);line-height:1.03;letter-spacing:-.025em}
+ .hero .eyebrow{font-size:10px;letter-spacing:.16em;line-height:1.5}
+ .hero p{color:#d2e0f0;font-size:13px;line-height:1.65}
+ .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+ .hero-actions .btn{min-width:0;width:100%;font-size:12px;line-height:1.3;padding:13px 9px;white-space:normal;overflow-wrap:break-word}
+ .rail{position:fixed;display:block;top:auto;bottom:0;left:0;right:0;width:100%;height:auto;min-height:0;padding:7px max(8px,env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));background:#121e30!important;border-top:1px solid #34465f;z-index:100;overflow:visible}
+ #nav{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));width:100%;min-width:0;gap:3px;align-items:stretch}
+ #nav .nav{box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:100%;min-width:0;max-width:none;min-height:62px;padding:8px 2px;margin:0;border-radius:11px;overflow:hidden;white-space:normal;text-align:center;color:#aabbd1}
+ #nav .nav i{display:block;font-size:21px;line-height:1;min-width:0}
+ #nav .nav span{display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;word-break:normal;overflow-wrap:normal;text-align:center;font-size:9px;line-height:1.12;letter-spacing:-.02em;font-weight:700;max-width:100%}
+ #nav .nav.active{background:#294361!important;color:#f3f9ff;box-shadow:inset 0 2px #9ccfff}
+ .grid{gap:10px}
+ .card{padding:15px;min-width:0;overflow:hidden}
+ .statnum{font-size:36px;line-height:1}
+ .statlab{font-size:10px;line-height:1.4;letter-spacing:.1em}
+ .card .sub{color:#aec0d2}
+}
+@media(max-width:370px){#nav .nav span{font-size:8px}#nav .nav{padding-inline:0}.hero-actions .btn{font-size:11px}}
 </style></head><body><div class="layout"><aside class="rail"><div class="brand">FULL<em>COURT.</em><small>DYNASTY MODE</small></div><div id="nav"></div><div class="rail-foot"><strong>THE ROAD TO MARCH</strong><p class="tiny">Every season is a story. Every decision matters.</p></div></aside><main class="main"><div id="app"></div></main></div><div id="toast" class="toast hidden"></div><div id="modal" class="modalwrap hidden"></div><script>
 const NAMES=['Darius King','Malik Henderson','Jalen Cross','Tyrese Mercer','Cam Whitfield','Eli Brooks','Zion Holloway','Jordan Fields','KJ Rivers','Andre Coleman','Devin Scott','Micah Hayes','Noah Carter','Isaiah Grant','Trey Bennett','Javon Mitchell','Kobe Lawson','Miles Porter','Jace Williams','Amari Ellis','Luca Marino','Jamal Price','Dante Foster','Chris Vaughn','RJ Parker','Quincy Rhodes','Marcus Bell','Keon Walker','Mason Young','Brandon Knox','Dre Owens','Nico Harris','AJ Simmons','Bryce Bailey','Tyrell Stone','Elijah Ward','Jaylen Moore','Damon Carter','Cade Pierce','Terrence Ross'];
 const PROGRAMS=[{name:'Villanova',abbr:'NOVA',mascot:'Wildcats',color:'#144f8b',prestige:83,conference:'Big East'},{name:'Iowa State',abbr:'ISU',mascot:'Cyclones',color:'#b32039',prestige:79,conference:'Big 12'},{name:'Creighton',abbr:'CRE',mascot:'Bluejays',color:'#1959a5',prestige:75,conference:'Big East'},{name:'Nebraska',abbr:'NEB',mascot:'Cornhuskers',color:'#cf3b43',prestige:67,conference:'Big Ten'},{name:'Duke',abbr:'DUKE',mascot:'Blue Devils',color:'#184a9b',prestige:91,conference:'ACC'},{name:'Kansas',abbr:'KU',mascot:'Jayhawks',color:'#244cab',prestige:89,conference:'Big 12'},{name:'UConn',abbr:'CONN',mascot:'Huskies',color:'#253956',prestige:91,conference:'Big East'},{name:'Kentucky',abbr:'UK',mascot:'Wildcats',color:'#246aab',prestige:86,conference:'SEC'},{name:'Gonzaga',abbr:'GON',mascot:'Bulldogs',color:'#343c76',prestige:86,conference:'WCC'},{name:'Purdue',abbr:'PUR',mascot:'Boilermakers',color:'#8d764b',prestige:83,conference:'Big Ten'},{name:'North Carolina',abbr:'UNC',mascot:'Tar Heels',color:'#66a8d9',prestige:89,conference:'ACC'},{name:'Marquette',abbr:'MARQ',mascot:'Golden Eagles',color:'#bf9c39',prestige:80,conference:'Big East'},{name:'Houston',abbr:'HOU',mascot:'Cougars',color:'#a63142',prestige:87,conference:'Big 12'},{name:'Arizona',abbr:'ARIZ',mascot:'Wildcats',color:'#ad2e48',prestige:85,conference:'Big 12'},{name:'Michigan State',abbr:'MSU',mascot:'Spartans',color:'#287755',prestige:83,conference:'Big Ten'},{name:'St. John’s',abbr:'STJ',mascot:'Red Storm',color:'#b83747',prestige:77,conference:'Big East'},{name:'Florida',abbr:'FLA',mascot:'Gators',color:'#e36c39',prestige:85,conference:'SEC'},{name:'Auburn',abbr:'AUB',mascot:'Tigers',color:'#d8793d',prestige:82,conference:'SEC'},{name:'Alabama',abbr:'BAMA',mascot:'Crimson Tide',color:'#9e2d38',prestige:82,conference:'SEC'},{name:'Illinois',abbr:'ILL',mascot:'Fighting Illini',color:'#da692f',prestige:79,conference:'Big Ten'}];
